@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "GymTrack",
+    "slug": "gymtrack",
+    "scheme": "gymtrack",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-image"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

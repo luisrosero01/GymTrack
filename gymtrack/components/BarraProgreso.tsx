@@ -1,0 +1,2 @@
+import React from 'react';import {View,Text} from 'react-native';import {C} from '@/constants/colores';
+export function BarraProgreso({valor,total}:{valor:number;total:number}){const porcentaje=total?Math.round(valor/total*100):0;return <View style={{marginVertical:14}}><Text style={{fontWeight:'700',color:C.texto,marginBottom:8}}>{valor} de {total} ejercicios • {porcentaje}%</Text><View style={{height:12,borderRadius:10,backgroundColor:'#E3D8F2',overflow:'hidden'}}><View style={{height:'100%',width:`${porcentaje}%`,backgroundColor:C.primario}}/></View></View>}
