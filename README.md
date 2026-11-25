@@ -38,8 +38,10 @@ Escanea el QR con Expo Go. `npx expo install --fix` alinea versiones compatibles
 | RF11 Persistencia con AsyncStorage | Cumplido |
 
 ## Capturas
-Pendientes de adjuntar al README antes de entregar: Inicio, Catálogo, Medidas y Perfil.
-
+| Inicio | Catálogo |
+| :---: | :---: |
+| <img src="gymtrack/capturas/inicio.png" width="250"> | <img src="gymtrack/capturas/catalogo.png" width="250"> |
+| Plan semanal de entrenamiento | Catálogo de ejercicios |
 ## Video demostrativo
 Pendiente: grabación menor de 5 minutos mostrando RF01-RF08 en un dispositivo.
 
@@ -99,12 +101,7 @@ Requisitos y límites:
 - No agregues dependencias ni modifiques archivos fuera del alcance sin justificarlo. Ejecuta las comprobaciones apropiadas y resume archivos modificados, resultados y limitaciones.
 ```
 
-## Capturas de la aplicación
 
-| Inicio | Catálogo |
-| :---: | :---: |
-| <img src="gymtrack/capturas/inicio.png" width="250"> | <img src="gymtrack/capturas/catalogo.png" width="250"> |
-| Plan semanal de entrenamiento | Catálogo de ejercicios |
 
 | Medidas | Perfil |
 | :---: | :---: |
