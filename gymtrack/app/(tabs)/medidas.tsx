@@ -18,24 +18,35 @@ export default function Medidas(){
   const reciente=ordenadas[0];
   const anterior=ordenadas[1];
   const [seccion,setSeccion]=useState<'imc'|'historia'>('imc');
-  const [mes,setMes]=useState('');
+  const mesActual=new Date();
+  const mesPredeterminado=`${mesActual.getFullYear()}-${String(mesActual.getMonth()+1).padStart(2,'0')}`;
+  const [mes,setMes]=useState(mesPredeterminado);
   const [peso,setPeso]=useState('');
   const [estatura,setEstatura]=useState('');
   const [perimetros,setPerimetros]=useState<Record<Perimetro,string>>({hombro:'',brazo:'',antebrazo:'',pecho:'',abdomen:'',cadera:'',pierna:'',pantorrilla:''});
   const [error,setError]=useState('');
 
-  const guardar=()=>{
+  const guardar=async()=>{
     const kg=Number(peso.replace(',','.'));
     const m=Number(estatura.replace(',','.'));
-    if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(mes)){setError('Mes inválido: utiliza AAAA-MM');return}
-    if(ordenadas.some(x=>x.mes===mes)){setError('Ese mes ya existe');return}
+    const mesNormalizado=mes.trim();
+    if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(mesNormalizado)){setError('Mes inválido: utiliza AAAA-MM');return}
     if(!peso.trim()||!Number.isFinite(kg)||kg<30||kg>300){setError('Peso entre 30 y 300 kg');return}
     if(!estatura.trim()||!Number.isFinite(m)||m<1||m>2.3){setError('Estatura entre 1,00 y 2,30 m');return}
-    const valores={} as Record<Perimetro,number>;
-    for(const c of campos){const v=perimetros[c].trim();const n=Number(v.replace(',','.'));if(!v||!Number.isFinite(n)||n<=0||n>300){setError(`Perímetro ${c}: escribe un valor entre 0 y 300 cm`);return}valores[c]=n}
-    const nueva:Medida={mes,pesoKg:kg,estaturaM:m,perimetrosCm:valores};
-    agregarMedida(nueva);setMes('');setPeso('');setEstatura('');
+    const valores={} as Partial<Record<Perimetro,number>>;
+    for(const c of campos){
+      const v=perimetros[c].trim();
+      if(!v)continue;
+      const n=Number(v.replace(',','.'));
+      if(!Number.isFinite(n)||n<=0||n>300){setError(`Perímetro ${c}: escribe un valor entre 0 y 300 cm`);return}
+      valores[c]=n;
+    }
+    const nueva:Medida={mes:mesNormalizado,pesoKg:kg,estaturaM:m,perimetrosCm:valores};
+    const guardado=await agregarMedida(nueva);
+    if(!guardado){setError('No se pudo guardar el registro. Revisa el almacenamiento del dispositivo');return}
+    setMes(mesPredeterminado);setPeso('');setEstatura('');
     setPerimetros({hombro:'',brazo:'',antebrazo:'',pecho:'',abdomen:'',cadera:'',pierna:'',pantorrilla:''});setError('');
+    setSeccion('historia');
     Alert.alert('Guardado','Medida mensual registrada');
   };
 
@@ -58,7 +69,7 @@ export default function Medidas(){
         {anterior?<Text style={{fontSize:14,fontWeight:'700',color:C.gris,marginTop:8}}>Cambio frente al mes anterior: {(reciente.pesoKg-anterior.pesoKg).toFixed(1)} kg</Text>:null}
       </View>:null}
       <Text style={{fontSize:17,fontWeight:'800',color:C.texto,marginBottom:10}}>Registrar medida</Text>
-      <CampoFormulario etiqueta="Mes (AAAA-MM)" placeholder="2026-12" value={mes} onChangeText={setMes}/>
+      <CampoFormulario etiqueta="Mes (AAAA-MM)" placeholder={mesPredeterminado} value={mes} onChangeText={setMes}/>
       {[
         ['peso','Peso (kg)',peso,setPeso],
         ['estatura','Estatura (m)',estatura,setEstatura],
@@ -67,10 +78,10 @@ export default function Medidas(){
       {error?<Text style={{color:'#BE123C',marginBottom:10}}>{error}</Text>:null}
       <Boton titulo="Guardar registro" onPress={guardar}/>
     </>:<View>
-      {ordenadas.map(m=>{const valor=calcularImc(m.pesoKg,m.estaturaM);return <View key={m.mes} style={{backgroundColor:'white',borderRadius:16,padding:15,marginBottom:10,borderWidth:1,borderColor:C.borde}}>
+      {ordenadas.length===0?<Text style={{color:C.gris,textAlign:'center',marginTop:20}}>Aún no tienes registros de medidas.</Text>:ordenadas.map(m=>{const valor=calcularImc(m.pesoKg,m.estaturaM);return <View key={m.mes} style={{backgroundColor:'white',borderRadius:16,padding:15,marginBottom:10,borderWidth:1,borderColor:C.borde}}>
         <View style={{flexDirection:'row',justifyContent:'space-between'}}><Text style={{fontSize:17,fontWeight:'800',color:C.texto}}>{m.mes}</Text><Text style={{color:C.primario,fontWeight:'800'}}>{m.pesoKg} kg</Text></View>
         <Text style={{color:C.gris,marginTop:4}}>Estatura: {m.estaturaM} m • IMC: {valor.toFixed(1)}</Text>
-        {campos.map(c=><View key={c} style={{flexDirection:'row',alignItems:'center',marginTop:7}}><Ionicons name={iconos[c]} size={14} color={C.primario}/><Text style={{marginLeft:7,color:C.gris,textTransform:'capitalize'}}>{c}: {m.perimetrosCm[c]} cm</Text></View>)}
+        {campos.filter(c=>m.perimetrosCm[c]!==undefined).map(c=><View key={c} style={{flexDirection:'row',alignItems:'center',marginTop:7}}><Ionicons name={iconos[c]} size={14} color={C.primario}/><Text style={{marginLeft:7,color:C.gris,textTransform:'capitalize'}}>{c}: {m.perimetrosCm[c]} cm</Text></View>)}
       </View>})}
     </View>}
   </ScrollView></KeyboardAvoidingView></Pantalla></SafeAreaView>
