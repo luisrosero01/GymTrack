@@ -22,3 +22,4 @@ Aplicacion movil para la gestion de rutinas de entrenamiento y seguimiento del p
 | Medidas | Perfil |
 | :---: | :---: |
 | <img src="gymtrack/capturas/medidas.png" width="250"> | <img src="gymtrack/capturas/perfil.png" width="250"> |
+
