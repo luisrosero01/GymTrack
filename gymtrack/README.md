@@ -98,3 +98,16 @@ Requisitos y límites:
 - Incluye pruebas para datos incompletos, lesiones registradas, respuesta inválida, error de red y ausencia de consentimiento.
 - No agregues dependencias ni modifiques archivos fuera del alcance sin justificarlo. Ejecuta las comprobaciones apropiadas y resume archivos modificados, resultados y limitaciones.
 ```
+
+## Capturas de la aplicación
+
+| Inicio | Catálogo |
+| :---: | :---: |
+| <img src="capturas/inicio.png" width="250"> | <img src="capturas/catalogo.png" width="250"> |
+| Plan semanal de entrenamiento | Catálogo de ejercicios |
+
+| Medidas | Perfil |
+| :---: | :---: |
+| <img src="capturas/medidas.png" width="250"> | <img src="capturas/perfil.png" width="250"> |
+| Registro de medidas corporales | Información del socio |
+
